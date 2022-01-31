@@ -14,21 +14,46 @@ CREATE TABLE IF NOT EXISTS users (
 );
 """
 
-CLEAR_TABLE_CHALLENGE = "DELETE FROM challenges"
+CLEAR_TABLE_USERS = "DELETE FROM users"
 
 USER_DATA = [
-    User(1, camel_id="4395", email="pnguyen@conncoll.edu", name="Phong Nguyen", balance=10, ssn="909-03-4642", birth_date="16-09-2001",phone_number="860-514-8412"),
-    User(2, camel_id="3048", email="jdoe@conncoll.edu", name="John Doe", balance=20, ssn="757-85-7495", birth_date="01-04-2002", phone_number="860-485-1242"),
-    User(3, camel_id="1062", email="jschaeffer@conncoll.edu", name="John Schaeffer", balance=1000, ssn="778-62-8144", birth_date="25-08-1970", phone_number="860-234-7261"),
+    User(
+        1,
+        camel_id="4395",
+        email="pnguyen@conncoll.edu",
+        name="Phong Nguyen",
+        balance=10,
+        ssn="909-03-4642",
+        birth_date="16-09-2001",
+        phone_number="860-514-8412",
+    ),
+    User(
+        2,
+        camel_id="3048",
+        email="jdoe@conncoll.edu",
+        name="John Doe",
+        balance=20,
+        ssn="757-85-7495",
+        birth_date="01-04-2002",
+        phone_number="860-485-1242",
+    ),
+    User(
+        3,
+        camel_id="1062",
+        email="jschaeffer@conncoll.edu",
+        name="John Schaeffer",
+        balance=1000,
+        ssn="778-62-8144",
+        birth_date="25-08-1970",
+        phone_number="860-234-7261",
+    ),
 ]
-
-MIN_CHALLENGES_PER_USER = 2
-MAX_CHALLENGES_PER_USER = 6
 
 
 def start_database():
     with connection_context() as cur:
         cur.execute(CREATE_TABLE_USER)
+        cur.execute(CLEAR_TABLE_USERS)
 
         for user in USER_DATA:
             insert_cmd = f"""

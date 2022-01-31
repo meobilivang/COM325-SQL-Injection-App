@@ -34,6 +34,7 @@
     "workbench.iconTheme": "material-icon-theme",
     "workbench.colorTheme": "SynthWave '84",
     "workbench.startupEditor": "readme",
+    "python.pythonPath": "${workspaceFolder}/.venv/bin/python",
     "files.exclude": {
         "**/.pytest_cache": true,
         "**/.venv": true,

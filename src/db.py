@@ -34,7 +34,9 @@ def connection_context():
 
 
 def get_user(camel_id: str) -> List[Any]:
-    query = f"SELECT id, camel_id, name, ssn, balance, email, birth_date, phone_number FROM users WHERE camel_id='{camel_id}';"
+    query = f"""
+    SELECT id, camel_id, name, ssn, balance, email, birth_date, phone_number FROM users WHERE camel_id='{camel_id}';
+    """
     print("-" * 50)
     print(f"[bold]Executing query:[/bold] [green]{query}[/green]")
     print(f"[bold]{'-' * 50}[/bold]")
