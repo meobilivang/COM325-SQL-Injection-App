@@ -11,3 +11,12 @@ class User:
     balance: int
     birth_date: str
     phone_number: str
+
+
+@dataclass
+class Card:
+    id: int
+    camel_id: str
+    card_num: str
+    cvv: int
+    exp_date: str

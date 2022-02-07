@@ -33,16 +33,106 @@ def connection_context():
     conn.close()
 
 
-def get_user(camel_id: str) -> List[Any]:
-    query = f"""
-    SELECT id, camel_id, name, ssn, balance, email, birth_date, phone_number FROM users WHERE camel_id='{camel_id}';
-    """
+def print_query_terminal(query):
     print("-" * 50)
-    print(f"[bold]Executing query:[/bold] [green]{query}[/green]")
+    print(f"[bold]Executing query:[/bold] [bold green blink]{query}[/bold green blink]")
     print(f"[bold]{'-' * 50}[/bold]")
+
+
+def get_user(camel_id: str) -> List[Any]:
+    """Unsafe function retrieving Users
+
+    Args:
+        camel_id (str)
+    """
+    query = f"""
+        SELECT
+            id, camel_id, name, ssn, balance, email, birth_date, phone_number
+        FROM users
+        WHERE
+            camel_id='{camel_id}';
+    """
+
+    print_query_terminal(query)
 
     with connection_context() as cur:
         cur.execute(query)
+        results = cur.fetchall()
+
+        return results
+
+
+def get_cards(camel_id: str) -> List[Any]:
+    """Unsafe function retrieving Cards
+
+    Args:
+        camel_id (str)
+    """
+    query = f"""
+        SELECT
+            card_num, cvv
+        FROM cards c
+        JOIN users u
+        WHERE
+            u.camel_id='{camel_id}';
+    """
+
+    print_query_terminal(query)
+
+    with connection_context() as cur:
+        cur.execute(query)
+        results = cur.fetchall()
+
+        return results
+
+
+##### IMPLEMENTING SAFE METHODS #####
+
+
+def get_user_safe(camel_id: str) -> List[Any]:
+    """Safe Method for Querying User data.
+        User Input is PARAMETERIZE => Passing as ARGUMENTS
+
+    Args:
+        camel_id (str)
+    """
+    query = f"""
+        SELECT
+            id, camel_id, name, ssn, balance, email, birth_date, phone_number
+        FROM users
+        WHERE
+            camel_id=?;
+    """
+
+    print_query_terminal(query)
+
+    with connection_context() as cur:
+        cur.execute(query, (camel_id,))
+        results = cur.fetchall()
+
+        return results
+
+
+def get_cards_safe(camel_id: str) -> List[Any]:
+    """Safe Method for Querying Card data.
+        User Input is PARAMETERIZE => Passing as ARGUMENTS
+
+    Args:
+        camel_id (str)
+    """
+    query = f"""
+        SELECT
+            card_num, cvv
+        FROM cards c
+        JOIN users u
+        WHERE
+            u.camel_id=?;
+    """
+
+    print_query_terminal(query)
+
+    with connection_context() as cur:
+        cur.execute(query, (camel_id,))
         results = cur.fetchall()
 
         return results

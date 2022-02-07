@@ -1,5 +1,5 @@
 from db import connection_context
-from models import User
+from models import Card, User
 
 CREATE_TABLE_USER = """
 CREATE TABLE IF NOT EXISTS users (
@@ -14,7 +14,20 @@ CREATE TABLE IF NOT EXISTS users (
 );
 """
 
+CREATE_TABLE_CARDS = """
+CREATE TABLE IF NOT EXISTS cards (
+    id integer PRIMARY KEY,
+    camel_id varchar(5) UNIQUE NOT NULL,
+    card_num varchar(16) UNIQUE NOT NULL,
+    cvv integer UNIQUE NOT NULL,
+    exp_date varchar(12) NOT NULL,
+    FOREIGN KEY (camel_id) REFERENCES users (camel_id)
+);
+"""
+
 CLEAR_TABLE_USERS = "DELETE FROM users"
+CLEAR_TABLE_CARDS = "DELETE FROM cards"
+
 
 USER_DATA = [
     User(
@@ -49,11 +62,21 @@ USER_DATA = [
     ),
 ]
 
+CARD_DATA = [
+    Card(1, "4395", "4293 1891 0000 0008", "821", "01/25"),
+    Card(2, "4395", "3700 0000 0000 002", "611", "06/25"),
+    Card(3, "3048", "4035 5010 0000 0008", "674", "09/24"),
+    Card(4, "3048", "6703 4444 4444 4449", "982", "04/22"),
+]
+
 
 def start_database():
     with connection_context() as cur:
         cur.execute(CREATE_TABLE_USER)
+        cur.execute(CREATE_TABLE_CARDS)
+
         cur.execute(CLEAR_TABLE_USERS)
+        cur.execute(CLEAR_TABLE_CARDS)
 
         for user in USER_DATA:
             insert_cmd = f"""
@@ -67,6 +90,20 @@ def start_database():
                     '{user.email}',
                     '{user.birth_date}',
                     '{user.phone_number}'
+                )
+                ON CONFLICT DO NOTHING
+            """
+            cur.execute(insert_cmd)
+
+        for card in CARD_DATA:
+            insert_cmd = f"""
+                INSERT INTO cards (id, camel_id, card_num, cvv, exp_date)
+                VALUES (
+                    '{card.id}',
+                    '{card.camel_id}',
+                    '{card.card_num}',
+                    '{card.cvv}',
+                    '{card.exp_date}'
                 )
                 ON CONFLICT DO NOTHING
             """
