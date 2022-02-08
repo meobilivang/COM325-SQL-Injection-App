@@ -4,7 +4,7 @@ image:
 ports:
   - port: 5000
     visibility: public
-    onOpen: open-browser
+    onOpen: open-preview
 
 tasks:
   - command: python src/main.py
